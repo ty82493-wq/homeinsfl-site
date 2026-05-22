@@ -441,7 +441,7 @@
   let turnstileWidgetId = null;
   (function initTurnstile(){
     if(!TURNSTILE_SITEKEY) return;
-    if(!window.turnstile) return setTimeout(initTurnstile, 200);
+    if(!window.turnstile || typeof window.turnstile.render !== 'function') return setTimeout(initTurnstile, 200);
     const el = document.getElementById('turnstile');
     if(el && turnstileWidgetId === null){
       turnstileWidgetId = window.turnstile.render(el, { sitekey: TURNSTILE_SITEKEY });

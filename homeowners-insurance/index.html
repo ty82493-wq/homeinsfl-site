@@ -493,7 +493,7 @@
   let turnstileWidgetId = null;
   (function initTurnstile(){
     if(!TURNSTILE_SITEKEY) return;                       // no key → skip (dev/demo)
-    if(!window.turnstile) return setTimeout(initTurnstile, 200); // wait for script
+    if(!window.turnstile || typeof window.turnstile.render !== 'function') return setTimeout(initTurnstile, 200); // wait for script
     const el = document.getElementById('turnstile');
     if(el && turnstileWidgetId === null){
       turnstileWidgetId = window.turnstile.render(el, { sitekey: TURNSTILE_SITEKEY });
