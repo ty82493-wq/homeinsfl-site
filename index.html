@@ -378,6 +378,12 @@
           <div class="field"><label class="lbl">Last name <span class="req">*</span></label><input id="lastName" autocomplete="family-name" /></div>
         </div>
         <div class="field"><label class="lbl">Date of birth <span class="req">*</span></label><input id="dob" type="date" autocomplete="bday" /></div>
+        <div class="row2">
+          <div class="field"><label class="lbl">Gender <span class="req">*</span></label>
+            <select id="gender"><option value="">Select…</option><option>Female</option><option>Male</option><option>Other</option></select></div>
+          <div class="field"><label class="lbl">Marital status <span class="req">*</span></label>
+            <select id="marital"><option value="">Select…</option><option>Single</option><option>Married</option><option>Divorced</option><option>Widowed</option></select></div>
+        </div>
         <div class="field ac-wrap"><label class="lbl">Street address <span class="req">*</span></label><input id="street" placeholder="123 Main St" autocomplete="off" /><div class="ac-list" id="acList"></div></div>
         <div class="row2">
           <div class="field"><label class="lbl">City <span class="req">*</span></label><input id="city" autocomplete="address-level2" /></div>
@@ -388,7 +394,7 @@
           <div class="field"><label class="lbl">Email <span class="req">*</span></label><input id="email" type="email" autocomplete="email" /></div>
           <div class="field"><label class="lbl">Mobile <span class="req">*</span></label><input id="phone" type="tel" autocomplete="tel" /></div>
         </div>
-        <label class="consent"><input type="checkbox" id="consentText" /> <span>I agree to be contacted by <b>text and email</b> about my quote. <span class="req">*</span></span></label>
+        <label class="consent"><input type="checkbox" id="consentText" /> <span>I agree to be contacted by <b>text and email</b> about my quote, and I agree to the <a href="#" onclick="qmAuth(event)">terms and conditions</a>. <span class="req">*</span></span></label>
         <label class="consent"><input type="checkbox" id="consentPhone" /> <span>You may also call me by phone <em>(optional)</em>.</span></label>
         <div id="turnstile" style="margin-top:14px"></div>
         <p class="err" id="err1">Please fill in the required fields and agree to text/email contact.</p>
@@ -688,8 +694,28 @@
   </div>
 </div>
 
+<!-- ===================== TERMS & CONDITIONS POPUP ===================== -->
+<div class="qm-overlay" id="authOverlay" aria-hidden="true">
+  <div class="qm-card" role="dialog" aria-modal="true" aria-label="Terms and conditions" style="max-width:560px">
+    <button class="qm-close" onclick="qmAuthClose()" aria-label="Close">&times;</button>
+    <h3 style="font-family:'Fraunces',serif;font-size:1.35rem;margin-bottom:14px;color:var(--ink)">Terms &amp; Conditions</h3>
+    <div style="color:var(--ink-2);font-size:.94rem;line-height:1.6;max-height:50vh;overflow-y:auto">
+      <p style="font-weight:600;color:var(--ink);margin-bottom:6px">Consumer reports authorization</p>
+      <p style="margin-bottom:16px">By requesting this quote, you authorize us and the insurance companies we represent to obtain consumer reports and/or investigative consumer reports, including credit-based insurance scores, claims history reports, driving records, and other underwriting information as permitted by law for the purpose of underwriting, rating, and providing insurance quotes.</p>
+      <p style="font-weight:600;color:var(--ink);margin-bottom:6px">Contact consent</p>
+      <p style="margin-bottom:16px">You agree to be contacted by text and email regarding your quote. We never sell or share your information. You may be contacted by phone only if you separately opt in.</p>
+      <p style="color:var(--muted);font-size:.86rem;margin-top:4px">[ Placeholder — additional terms, privacy policy, and quote disclosures to be completed before launch (pending compliance review). ]</p>
+    </div>
+    <button class="btn block" style="margin-top:20px" onclick="qmAuthClose()">Got it</button>
+  </div>
+</div>
+
 <script>
   document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // Consumer-reports authorization popup (linked from the consent checkbox label)
+  function qmAuth(e){ if(e) e.preventDefault(); const o=document.getElementById('authOverlay'); o.classList.add('open'); o.setAttribute('aria-hidden','false'); }
+  function qmAuthClose(){ const o=document.getElementById('authOverlay'); o.classList.remove('open'); o.setAttribute('aria-hidden','true'); }
 
   // ---- config: where the form posts ----
   // INTAKE_ENDPOINT is a SAME-ORIGIN Cloudflare Pages Function (added later) that
@@ -803,17 +829,19 @@
   // then opens the quote modal (the post-Step-1 flow).
   function goStep2(){
     const fn = val('firstName'), ln = val('lastName'), dob = val('dob'),
+          gender = val('gender'), marital = val('marital'),
           street = val('street'), city = val('city'), zip = val('zip'),
           em = val('email'), ph = val('phone'),
           ct = document.getElementById('consentText').checked;
-    const ok = fn && ln && dob && street && city && /^\d{5}$/.test(zip)
+    const ok = fn && ln && dob && gender && marital && street && city && /^\d{5}$/.test(zip)
                && isEmail(em) && ph.replace(/\D/g,'').length >= 7 && ct;
     if(!ok){ document.getElementById('err1').style.display='block'; return; }
     document.getElementById('err1').style.display='none';
 
     Object.assign(lead, {
       firstName: fn, lastName: ln, dateOfBirth: dob,
-      address: { line1: street, city, state: val('state') || 'FL', zip }, // county derived server-side from zip
+      gender, maritalStatus: marital,
+      address: { line1: street, city, state: val('state') || 'FL', zip }, // county + effective date derived server-side
       email: em, phone: ph,
       consentText: true, consentPhone: document.getElementById('consentPhone').checked
     });
