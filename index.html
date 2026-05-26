@@ -394,6 +394,8 @@
           <div class="field"><label class="lbl">Email <span class="req">*</span></label><input id="email" type="email" autocomplete="email" /></div>
           <div class="field"><label class="lbl">Mobile <span class="req">*</span></label><input id="phone" type="tel" autocomplete="tel" /></div>
         </div>
+        <div class="field"><label class="lbl">Do you currently have active home insurance? <span class="req">*</span></label>
+          <select id="currentlyInsured"><option value="">Select…</option><option>Yes</option><option>No</option></select></div>
         <label class="consent"><input type="checkbox" id="consentText" /> <span>I agree to be contacted by <b>text and email</b> about my quote, and I agree to the <a href="#" onclick="qmAuth(event)">terms and conditions</a>. <span class="req">*</span></span></label>
         <label class="consent"><input type="checkbox" id="consentPhone" /> <span>You may also call me by phone <em>(optional)</em>.</span></label>
         <div id="turnstile" style="margin-top:14px"></div>
@@ -830,10 +832,11 @@
   function goStep2(){
     const fn = val('firstName'), ln = val('lastName'), dob = val('dob'),
           gender = val('gender'), marital = val('marital'),
+          insured = val('currentlyInsured'),
           street = val('street'), city = val('city'), zip = val('zip'),
           em = val('email'), ph = val('phone'),
           ct = document.getElementById('consentText').checked;
-    const ok = fn && ln && dob && gender && marital && street && city && /^\d{5}$/.test(zip)
+    const ok = fn && ln && dob && gender && marital && insured && street && city && /^\d{5}$/.test(zip)
                && isEmail(em) && ph.replace(/\D/g,'').length >= 7 && ct;
     if(!ok){ document.getElementById('err1').style.display='block'; return; }
     document.getElementById('err1').style.display='none';
@@ -841,6 +844,7 @@
     Object.assign(lead, {
       firstName: fn, lastName: ln, dateOfBirth: dob,
       gender, maritalStatus: marital,
+      currentlyInsured: insured, // "Yes" → PoliFlow defaults carrier "Other" / policy "UNKNOWN"
       address: { line1: street, city, state: val('state') || 'FL', zip }, // county + effective date derived server-side
       email: em, phone: ph,
       consentText: true, consentPhone: document.getElementById('consentPhone').checked
