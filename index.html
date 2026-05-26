@@ -237,6 +237,96 @@
   .d1{animation-delay:.05s}.d2{animation-delay:.15s}.d3{animation-delay:.25s}.d4{animation-delay:.35s}
   @keyframes rise { to { opacity: 1; transform: none; } }
   .stepwrap { transition: opacity .25s; }
+
+  /* ===================== ADDRESS AUTOCOMPLETE ===================== */
+  .ac-wrap{ position:relative; }
+  .ac-list{ position:absolute; left:0; right:0; top:100%; z-index:30; background:#fff; border:1.5px solid var(--blue);
+    border-top:none; border-radius:0 0 11px 11px; box-shadow:var(--shadow-sm); overflow:hidden; display:none; }
+  .ac-list.show{ display:block; }
+  .ac-item{ padding:11px 13px; cursor:pointer; font-size:.95rem; color:var(--ink-2); border-top:1px solid var(--line); }
+  .ac-item:first-child{ border-top:none; }
+  .ac-item:hover, .ac-item.active{ background:var(--blue-soft); color:var(--ink); }
+
+  /* ===================== QUOTE MODAL ===================== */
+  .qm-overlay{ position:fixed; inset:0; z-index:200; display:none; align-items:flex-start; justify-content:center;
+    padding:max(20px,4vh) 16px; background:rgba(22,32,58,.55); backdrop-filter:blur(6px); overflow-y:auto; }
+  .qm-overlay.open{ display:flex; }
+  .qm-card{ position:relative; width:100%; max-width:540px; background:var(--card); border:1px solid var(--line);
+    border-radius:22px; box-shadow:0 40px 90px -30px rgba(22,32,58,.55); padding:34px 30px 30px; margin:auto;
+    animation:qmIn .3s cubic-bezier(.2,.8,.2,1); }
+  @keyframes qmIn{ from{ opacity:0; transform:translateY(16px) scale(.985);} to{ opacity:1; transform:none; } }
+  .qm-close{ position:absolute; top:14px; right:16px; width:34px; height:34px; border:none; background:var(--page);
+    color:var(--muted); border-radius:50%; font-size:1.35rem; line-height:1; cursor:pointer; transition:background .15s,color .15s; }
+  .qm-close:hover{ background:var(--line); color:var(--ink); }
+  .qm-prog{ height:5px; border-radius:999px; background:var(--line); margin-bottom:22px; overflow:hidden; display:none; }
+  .qm-prog.show{ display:block; }
+  .qm-prog span{ display:block; height:100%; width:0; background:linear-gradient(90deg,var(--blue),var(--blue-deep));
+    border-radius:999px; transition:width .35s cubic-bezier(.2,.8,.2,1); }
+  .qm-screen h3{ font-family:"Fraunces",serif; font-size:1.5rem; font-weight:600; line-height:1.12; margin-bottom:8px; color:var(--ink); }
+  .qm-step{ display:inline-block; font:600 .74rem "Hanken Grotesk"; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--blue-deep); background:var(--blue-soft); padding:5px 11px; border-radius:999px; margin-bottom:13px; }
+  .qm-sub{ color:var(--muted); font-size:.96rem; margin-bottom:20px; }
+  .qm-screen input[type=number], .qm-screen input[type=text], .qm-screen input[type=date], .qm-screen textarea{
+    width:100%; font:500 1.05rem "Hanken Grotesk"; color:var(--ink); background:#fff; border:1.5px solid var(--line);
+    border-radius:11px; padding:13px 14px; transition:border-color .15s,box-shadow .15s; }
+  .qm-screen input:focus, .qm-screen textarea:focus{ outline:none; border-color:var(--blue); box-shadow:0 0 0 3px var(--blue-soft); }
+  .qm-screen input:disabled{ background:var(--page); color:var(--muted); }
+  .qm-screen textarea{ min-height:96px; resize:vertical; line-height:1.5; }
+  .qm-nav{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:24px; }
+  .qm-nav .btn{ flex:1; }
+  .qm-back{ background:none; border:none; color:var(--muted); font:600 .95rem "Hanken Grotesk"; cursor:pointer; padding:8px 4px; flex:none; }
+  .qm-back:hover{ color:var(--ink); }
+  .qm-link{ display:block; width:100%; background:none; border:none; color:var(--blue); font:600 .95rem "Hanken Grotesk";
+    cursor:pointer; margin-top:14px; text-align:center; }
+  .qm-link:hover{ text-decoration:underline; }
+  .qm-link.sm{ font-size:.88rem; margin-top:10px; color:var(--muted); }
+  .qm-err{ color:#b9534a; font-size:.85rem; font-weight:600; margin-top:11px; display:none; }
+  .qm-err.show{ display:block; }
+  .qm-check{ display:flex; align-items:center; gap:10px; margin-top:14px; font-size:.95rem; color:var(--ink-2); cursor:pointer; }
+  .qm-check input{ width:18px; height:18px; flex:none; accent-color:var(--blue); }
+  .qm-note{ font-size:.84rem; color:var(--muted); margin-top:14px; }
+  .qm-tiles{ display:grid; gap:11px; }
+  .qm-tiles.two{ grid-template-columns:1fr 1fr; }
+  .qm-tiles.three{ grid-template-columns:1fr 1fr 1fr; }
+  .qm-tile{ border:1.5px solid var(--line); border-radius:14px; padding:15px; cursor:pointer; background:#fff;
+    transition:border-color .15s,box-shadow .15s,background .15s; text-align:left; }
+  .qm-tile:hover{ border-color:var(--blue); }
+  .qm-tile.sel{ border-color:var(--blue); background:var(--blue-soft); box-shadow:0 0 0 3px var(--blue-soft); }
+  .qm-tile .t-title{ font-weight:600; color:var(--ink); }
+  .qm-tile .t-sub{ font-size:.83rem; color:var(--muted); margin-top:2px; }
+  .qm-tile.col{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; padding:18px 10px; }
+  .qm-tile.col svg{ display:block; }
+  .qm-cov{ text-align:center; background:var(--blue-soft); border-radius:16px; padding:22px; }
+  .qm-cov .lbl2{ font-size:.78rem; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:var(--blue-deep); }
+  .qm-cov .amt{ font-family:"Fraunces",serif; font-size:2.6rem; font-weight:600; color:var(--ink); margin:4px 0 2px; }
+  .qm-cov .basis{ font-size:.84rem; color:var(--ink-2); }
+  .qm-step2{ display:flex; align-items:center; justify-content:center; gap:16px; margin-top:12px; }
+  .qm-step2 button{ width:42px; height:42px; border-radius:50%; border:1.5px solid #fff; background:#fff; font-size:1.4rem;
+    color:var(--blue); cursor:pointer; line-height:1; box-shadow:var(--shadow-sm); }
+  .qm-step2 button:hover{ background:#fff; border-color:var(--blue); }
+  .qm-cov-edit{ margin-top:16px; text-align:left; }
+  .qm-cov-edit label{ font-size:.82rem; font-weight:600; color:var(--ink-2); margin-bottom:6px; display:block; }
+  .qm-drop{ display:block; border:2px dashed var(--line); border-radius:16px; padding:30px 18px; text-align:center;
+    cursor:pointer; transition:border-color .15s,background .15s; }
+  .qm-drop:hover{ border-color:var(--blue); background:var(--blue-soft); }
+  .qm-drop .di{ width:38px; height:38px; margin:0 auto 8px; display:block; }
+  .qm-drop-big{ font-weight:600; color:var(--ink); }
+  .qm-drop-sm{ font-size:.84rem; color:var(--muted); margin-top:5px; }
+  .qm-drop input{ display:none; }
+  .qm-files{ margin-top:12px; display:grid; gap:7px; }
+  .qm-filechip{ display:flex; align-items:center; gap:8px; font-size:.9rem; background:var(--page);
+    border:1px solid var(--line); border-radius:9px; padding:8px 11px; color:var(--ink-2); }
+  .qm-spinner{ width:46px; height:46px; border:4px solid var(--blue-soft); border-top-color:var(--blue);
+    border-radius:50%; margin:8px auto 18px; animation:qmSpin .8s linear infinite; }
+  @keyframes qmSpin{ to{ transform:rotate(360deg); } }
+  .qm-screen[data-screen=loading], .qm-screen[data-screen=done]{ text-align:center; padding:14px 4px; }
+  .qm-ring{ width:64px; height:64px; border-radius:50%; background:var(--blue-soft); color:var(--blue);
+    display:grid; place-items:center; margin:6px auto 16px; }
+  .qm-ring svg{ width:30px; height:30px; }
+  .qm-badge{ display:inline-block; margin-top:18px; font-size:.82rem; font-weight:600; color:var(--blue-deep);
+    background:var(--blue-soft); padding:8px 15px; border-radius:999px; }
+  @media (max-width:560px){ .qm-card{ padding:30px 20px 24px; border-radius:18px; } .qm-cov .amt{ font-size:2.2rem; }
+    .qm-tiles.three{ grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
@@ -287,10 +377,11 @@
           <div class="field"><label class="lbl">First name <span class="req">*</span></label><input id="firstName" autocomplete="given-name" /></div>
           <div class="field"><label class="lbl">Last name <span class="req">*</span></label><input id="lastName" autocomplete="family-name" /></div>
         </div>
-        <div class="field"><label class="lbl">Street address <span class="req">*</span></label><input id="street" placeholder="123 Main St" autocomplete="address-line1" /></div>
+        <div class="field"><label class="lbl">Date of birth <span class="req">*</span></label><input id="dob" type="date" autocomplete="bday" /></div>
+        <div class="field ac-wrap"><label class="lbl">Street address <span class="req">*</span></label><input id="street" placeholder="123 Main St" autocomplete="off" /><div class="ac-list" id="acList"></div></div>
         <div class="row2">
-          <div class="field"><label class="lbl">City <span class="req">*</span></label><input id="city" placeholder="Clermont" autocomplete="address-level2" /></div>
-          <div class="field"><label class="lbl">ZIP <span class="req">*</span></label><input id="zip" placeholder="34711" inputmode="numeric" maxlength="5" autocomplete="postal-code" /></div>
+          <div class="field"><label class="lbl">City <span class="req">*</span></label><input id="city" autocomplete="address-level2" /></div>
+          <div class="field"><label class="lbl">ZIP <span class="req">*</span></label><input id="zip" inputmode="numeric" maxlength="5" autocomplete="postal-code" /></div>
         </div>
         <input type="hidden" id="state" value="FL" />
         <div class="row2">
@@ -305,48 +396,8 @@
         <p class="miniprint"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 11 4.6-2.5 8-6 8-11V5l-8-3Z" stroke="#5B6677" stroke-width="2" stroke-linejoin="round"/></svg> Never sold. One agent. No spam calls.</p>
       </div>
 
-      <!-- STEP 2 -->
-      <div class="stepwrap" id="step2" style="display:none">
-        <div class="topline"><h2>A few quick details</h2><span class="stepind">Step 2 of 2</span></div>
-        <p class="sub">This lets us pull accurate quotes from your carriers.</p>
-
-        <label class="upload" for="docfile">
-          <div class="big">📄 Have your declarations page? Upload it and skip the typing.</div>
-          <div class="sm">PDF or photo of your current policy, wind-mit, or 4-point. Optional — but it speeds things up.</div>
-          <input id="docfile" type="file" accept=".pdf,.png,.jpg,.jpeg" onchange="showFile(this)" />
-        </label>
-        <div class="filechip" id="filechip">📎 <b id="filename"></b></div>
-
-        <div class="row2" style="margin-top:16px">
-          <div class="field"><label class="lbl">Date of birth <span class="req">*</span></label><input id="dob" type="date" /></div>
-          <div class="field"><label class="lbl">Marital status <span class="req">*</span></label>
-            <select id="marital"><option value="">Select…</option><option>Single</option><option>Married</option><option>Divorced</option><option>Widowed</option></select></div>
-        </div>
-        <div class="row2">
-          <div class="field"><label class="lbl">Gender <span class="req">*</span></label>
-            <select id="gender"><option value="">Select…</option><option>Female</option><option>Male</option><option>Other</option></select></div>
-          <div class="field"><label class="lbl">Coverage start date <span class="req">*</span></label><input id="effective" type="date" /></div>
-        </div>
-        <div class="row2">
-          <div class="field"><label class="lbl">Policy type</label>
-            <select id="policyType"><option>HO-3: Homeowners</option><option>HO-6: Condo</option><option>DP-3: Dwelling Fire</option><option>HO-4: Renters</option></select></div>
-          <div class="field"><label class="lbl">Current carrier <em>(optional)</em></label><input id="carrier" placeholder="e.g. Citizens" /></div>
-        </div>
-        <p class="err" id="err2">Please complete the required fields.</p>
-        <button class="btn block" style="margin-top:6px" onclick="submitLead()">Send my quotes →</button>
-        <button class="backlink" onclick="backStep1()">← Back</button>
-      </div>
-
-      <!-- CONFIRMATION -->
-      <div class="stepwrap" id="done" style="display:none">
-        <div class="confirm">
-          <div class="ring"><svg viewBox="0 0 30 30" fill="none"><path d="M7 15.5 12.5 21 23 9" stroke="#2D5BD6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <h2>You're all set, <span id="doneName">there</span>.</h2>
-          <p>We're pulling your quotes from top Florida carriers right now.</p>
-          <p>Watch your <strong>text and email</strong> — your quotes are on the way, usually within about 15 minutes.</p>
-          <span class="badge">We never sell your info · We won't call</span>
-        </div>
-      </div>
+      <!-- Step 2 + confirmation are now the center-screen quote modal (#qmOverlay), at the end of <body>. -->
+      <p class="err" id="err2" style="display:none"></p>
 
     </div>
   </div>
@@ -412,7 +463,7 @@
   <div class="wrap">
     <div class="sec-head"><span class="eyebrow">Built for Florida</span><h2>We actually know the Florida market</h2><p>Rate spikes, carriers pulling out, Citizens — Florida insurance doesn't play by the same rules as the rest of the country. We know the inspections and credits that actually bring your rate down.</p></div>
     <div class="exp-grid">
-      <div class="exp"><span class="ic"><svg viewBox="0 0 20 20" fill="none"><path d="M3 11l7-7 7 7M5 9v7h10V9" stroke="#2D5BD6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>Wind mitigation discounts</b><p>A wind-mit inspection can knock real money off your rate — and we make sure those credits actually get applied.</p></div></div>
+      <div class="exp"><span class="ic"><svg viewBox="0 0 20 20" fill="none"><path d="M3 11l7-7 7 7M5 9v7h10V9" stroke="#2D5BD6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>Wind mitigation discounts</b><p>A wind mitigation inspection can knock real money off your rate — and we make sure those credits actually get applied.</p></div></div>
       <div class="exp"><span class="ic"><svg viewBox="0 0 20 20" fill="none"><rect x="4" y="3" width="12" height="14" rx="2" stroke="#2D5BD6" stroke-width="1.8"/><path d="M7 7h6M7 10h6M7 13h4" stroke="#2D5BD6" stroke-width="1.6" stroke-linecap="round"/></svg></span><div><b>4-point inspections</b><p>Older home? We know what underwriters need and how to keep you eligible.</p></div></div>
       <div class="exp"><span class="ic"><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#2D5BD6" stroke-width="1.8"/><path d="M10 5v5l3 2" stroke="#2D5BD6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>Citizens alternatives</b><p>On Citizens or facing a take-out offer? We'll compare your options across the private market.</p></div></div>
       <div class="exp"><span class="ic"><svg viewBox="0 0 20 20" fill="none"><path d="M3 13c2-4 5-6 7-6s5 2 7 6" stroke="#2D5BD6" stroke-width="1.8" stroke-linecap="round"/><path d="M10 4v3M5 6l1.5 2M15 6l-1.5 2" stroke="#2D5BD6" stroke-width="1.6" stroke-linecap="round"/></svg></span><div><b>Hurricane deductibles</b><p>We explain how your hurricane deductible changes what you pay — so there are no surprises after a storm.</p></div></div>
@@ -475,6 +526,168 @@
   </div>
 </footer>
 
+<!-- ===================== QUOTE MODAL (post Step-1 flow) ===================== -->
+<div class="qm-overlay" id="qmOverlay" aria-hidden="true">
+  <div class="qm-card" role="dialog" aria-modal="true" aria-label="Complete your quote">
+    <button class="qm-close" onclick="qmClose()" aria-label="Close">&times;</button>
+    <div class="qm-prog" id="qmProg"><span id="qmProgFill"></span></div>
+
+    <!-- LOADING -->
+    <div class="qm-screen" data-screen="loading">
+      <div class="qm-spinner"></div>
+      <h3>Looking up your home…</h3>
+      <p class="qm-sub">Pulling property details for <b id="qmAddr">your address</b> so you don't have to type them.</p>
+    </div>
+
+    <!-- CHOICE: upload or manual -->
+    <div class="qm-screen" data-screen="choice" hidden>
+      <h3>Have your declaration page, wind mitigation, or four-point inspection?</h3>
+      <p class="qm-sub">Upload one or all so we have the most accurate information for your quote — it's the fastest path.</p>
+      <label class="qm-drop" for="qmFiles">
+        <svg class="di" viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0L8 8m4-4 4 4" stroke="#2D5BD6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="#2D5BD6" stroke-width="2" stroke-linecap="round"/></svg>
+        <div class="qm-drop-big">Drop files here or tap to upload</div>
+        <div class="qm-drop-sm">Declarations · Wind mitigation · 4-point · PDF or photo</div>
+        <input id="qmFiles" type="file" accept=".pdf,.png,.jpg,.jpeg" multiple onchange="qmFilesChosen(this)" />
+      </label>
+      <div class="qm-files" id="qmFileList"></div>
+      <button class="btn block" id="qmUploadSubmit" style="margin-top:16px" onclick="qmSubmitUpload()" disabled>Submit &amp; get my quote →</button>
+      <button class="qm-link" onclick="qmStartManual()">I'll enter my details manually instead →</button>
+    </div>
+
+    <!-- 1. ROOF YEAR -->
+    <div class="qm-screen" data-screen="roofYear" hidden>
+      <span class="qm-step">Step 1 of 8</span>
+      <h3>What year was your roof last replaced?</h3>
+      <p class="qm-sub">Most homeowners know this — it's the single biggest factor in your quote.</p>
+      <input id="qmRoofYear" type="number" inputmode="numeric" placeholder="e.g. 2016" min="1900" max="2026" />
+      <label class="qm-check"><input type="checkbox" id="qmRoofOriginal" onchange="qmRoofOriginalToggle(this)" /> <span>It's the original roof (never replaced)</span></label>
+      <button class="qm-link sm" onclick="qmRoofUnsure()">I'm not sure →</button>
+      <p class="qm-err" id="qmRoofYearErr">Enter the year, choose "original," or tap "I'm not sure."</p>
+      <div class="qm-nav"><button class="qm-back" onclick="qmBack()">← Back</button><button class="btn" onclick="qmRoofYearNext()">Continue →</button></div>
+    </div>
+
+    <!-- 2. ROOF SHAPE -->
+    <div class="qm-screen" data-screen="roofShape" hidden>
+      <span class="qm-step">Step 2 of 8</span>
+      <h3>What shape is your roof?</h3>
+      <p class="qm-sub">Gable comes to a point at the ends; hip slopes down on all four sides. Hip roofs often earn a wind discount.</p>
+      <div class="qm-tiles two" id="qmShapeTiles">
+        <div class="qm-tile col" data-val="Gable" onclick="qmPick('roofShape','Gable',this)">
+          <svg viewBox="0 0 80 60" width="86" height="64" fill="none"><path d="M10 30 40 8 70 30Z" fill="#EAF0FE" stroke="#2D5BD6" stroke-width="2.5" stroke-linejoin="round"/><rect x="17" y="30" width="46" height="24" fill="#fff" stroke="#2D5BD6" stroke-width="2.5"/><rect x="35" y="40" width="10" height="14" fill="#EAF0FE" stroke="#2D5BD6" stroke-width="2"/></svg>
+          <div class="t-title">Gable</div>
+        </div>
+        <div class="qm-tile col" data-val="Hip" onclick="qmPick('roofShape','Hip',this)">
+          <svg viewBox="0 0 80 60" width="86" height="64" fill="none"><path d="M10 30 28 11 52 11 70 30Z" fill="#EAF0FE" stroke="#2D5BD6" stroke-width="2.5" stroke-linejoin="round"/><path d="M28 11 34 30M52 11 46 30" stroke="#2D5BD6" stroke-width="1.6"/><rect x="17" y="30" width="46" height="24" fill="#fff" stroke="#2D5BD6" stroke-width="2.5"/><rect x="35" y="40" width="10" height="14" fill="#EAF0FE" stroke="#2D5BD6" stroke-width="2"/></svg>
+          <div class="t-title">Hip</div>
+        </div>
+      </div>
+      <button class="qm-link sm" onclick="qmPick('roofShape','Other/Not sure',event.currentTarget); qmNext('roofShape')">Other / not sure →</button>
+      <p class="qm-err" id="qmShapeErr">Please choose a roof shape.</p>
+      <div class="qm-nav"><button class="qm-back" onclick="qmBack()">← Back</button><button class="btn" onclick="qmShapeNext()">Continue →</button></div>
+    </div>
+
+    <!-- 3. ROOF MATERIAL -->
+    <div class="qm-screen" data-screen="roofMaterial" hidden>
+      <span class="qm-step">Step 3 of 8</span>
+      <h3>What's your roof made of?</h3>
+      <p class="qm-sub">Pick the closest match.</p>
+      <div class="qm-tiles" id="qmMatTiles">
+        <div class="qm-tile" data-val="Asphalt Shingle" onclick="qmPick('roofMaterial','Asphalt Shingle',this)"><div class="t-title">Asphalt / composition shingle</div><div class="t-sub">The most common — overlapping gray/black shingles.</div></div>
+        <div class="qm-tile" data-val="Metal" onclick="qmPick('roofMaterial','Metal',this)"><div class="t-title">Metal</div><div class="t-sub">Standing-seam or metal panels.</div></div>
+        <div class="qm-tile" data-val="Tile" onclick="qmPick('roofMaterial','Tile',this)"><div class="t-title">Tile</div><div class="t-sub">Clay or concrete barrel/flat tile.</div></div>
+        <div class="qm-tile" data-val="Other" onclick="qmPick('roofMaterial','Other',this)"><div class="t-title">Other / not sure</div></div>
+      </div>
+      <p class="qm-err" id="qmMatErr">Please choose a roof material.</p>
+      <div class="qm-nav"><button class="qm-back" onclick="qmBack()">← Back</button><button class="btn" onclick="qmMatNext()">Continue →</button></div>
+    </div>
+
+    <!-- 4. COVERAGE -->
+    <div class="qm-screen" data-screen="coverage" hidden>
+      <span class="qm-step">Step 4 of 8</span>
+      <h3>How much would it cost to rebuild your home?</h3>
+      <p class="qm-sub">We estimated this from your home's size. Adjust it, or enter a number you know — or just keep our estimate.</p>
+      <div class="qm-cov">
+        <div class="lbl2">Estimated dwelling coverage</div>
+        <div class="amt" id="qmCovAmt">—</div>
+        <div class="basis" id="qmCovBasis"></div>
+        <div class="qm-step2"><button type="button" onclick="qmCovStep(-5000)" aria-label="Decrease">−</button><button type="button" onclick="qmCovStep(5000)" aria-label="Increase">+</button></div>
+      </div>
+      <div class="qm-cov-edit">
+        <label>Or enter the exact amount</label>
+        <input id="qmCovInput" type="text" inputmode="numeric" placeholder="$" oninput="qmCovType(this.value)" />
+      </div>
+      <p class="qm-err" id="qmCovErr">Please enter or accept a coverage amount.</p>
+      <div class="qm-nav"><button class="qm-back" onclick="qmBack()">← Back</button><button class="btn" onclick="qmCovNext()">Continue →</button></div>
+    </div>
+
+    <!-- 5. DEDUCTIBLE -->
+    <div class="qm-screen" data-screen="deductible" hidden>
+      <span class="qm-step">Step 5 of 8</span>
+      <h3>Which deductible do you prefer?</h3>
+      <p class="qm-sub">This is what you'd pay out of pocket on a non-hurricane claim. A higher deductible usually means a lower premium.</p>
+      <div class="qm-tiles three" id="qmDedTiles">
+        <div class="qm-tile col" data-val="1000" onclick="qmPick('aopDeductible','1000',this)"><div class="t-title">$1,000</div></div>
+        <div class="qm-tile col" data-val="2500" onclick="qmPick('aopDeductible','2500',this)"><div class="t-title">$2,500</div></div>
+        <div class="qm-tile col" data-val="5000" onclick="qmPick('aopDeductible','5000',this)"><div class="t-title">$5,000</div></div>
+      </div>
+      <p class="qm-note">Hurricane deductible: <b>2%</b> of dwelling coverage (the Florida standard). Your agent can adjust this.</p>
+      <p class="qm-err" id="qmDedErr">Please choose a deductible.</p>
+      <div class="qm-nav"><button class="qm-back" onclick="qmBack()">← Back</button><button class="btn" onclick="qmDedNext()">Continue →</button></div>
+    </div>
+
+    <!-- 6. OTHER STRUCTURES -->
+    <div class="qm-screen" data-screen="otherStructures" hidden>
+      <span class="qm-step">Step 6 of 8</span>
+      <h3>Any other structures on the property?</h3>
+      <p class="qm-sub">Detached garage, shed, fence, pool cage, dock — anything not attached to the house.</p>
+      <div class="qm-tiles two" id="qmOtherTiles">
+        <div class="qm-tile col" data-val="Yes" onclick="qmOther('Yes',this)"><div class="t-title">Yes</div></div>
+        <div class="qm-tile col" data-val="No" onclick="qmOther('No',this)"><div class="t-title">No</div></div>
+      </div>
+      <div class="qm-cov-edit" id="qmOtherVal" style="display:none">
+        <label>Roughly what would they cost to replace? <em>(optional)</em></label>
+        <input id="qmOtherValIn" type="text" inputmode="numeric" placeholder="$" />
+      </div>
+      <p class="qm-err" id="qmOtherErr">Please choose Yes or No.</p>
+      <div class="qm-nav"><button class="qm-back" onclick="qmBack()">← Back</button><button class="btn" onclick="qmOtherNext()">Continue →</button></div>
+    </div>
+
+    <!-- 7. WATER HEATER -->
+    <div class="qm-screen" data-screen="waterHeater" hidden>
+      <span class="qm-step">Step 7 of 8</span>
+      <h3>How old is your water heater?</h3>
+      <p class="qm-sub">Original to the home, or has it been replaced?</p>
+      <div class="qm-tiles two" id="qmWHTiles">
+        <div class="qm-tile col" data-val="Original" onclick="qmWH('Original',this)"><div class="t-title">Original</div><div class="t-sub">Same age as the home</div></div>
+        <div class="qm-tile col" data-val="Replaced" onclick="qmWH('Replaced',this)"><div class="t-title">Replaced</div><div class="t-sub">Newer than the home</div></div>
+      </div>
+      <div class="qm-cov-edit" id="qmWHYear" style="display:none">
+        <label>What year was it replaced? <em>(optional)</em></label>
+        <input id="qmWHYearIn" type="number" inputmode="numeric" placeholder="e.g. 2020" min="1950" max="2026" />
+      </div>
+      <p class="qm-err" id="qmWHErr">Please choose Original or Replaced.</p>
+      <div class="qm-nav"><button class="qm-back" onclick="qmBack()">← Back</button><button class="btn" onclick="qmWHNext()">Continue →</button></div>
+    </div>
+
+    <!-- 8. COMMENTS -->
+    <div class="qm-screen" data-screen="comments" hidden>
+      <span class="qm-step">Step 8 of 8</span>
+      <h3>Anything else we should know?</h3>
+      <p class="qm-sub">Optional — recent renovations, a new roof permit, special features, or anything you'd like your agent to know.</p>
+      <textarea id="qmComments" placeholder="Leave a note (optional)…"></textarea>
+      <div class="qm-nav"><button class="qm-back" onclick="qmBack()">← Back</button><button class="btn" onclick="qmSubmitManual()">Submit &amp; get my quote →</button></div>
+    </div>
+
+    <!-- CONFIRMATION -->
+    <div class="qm-screen" data-screen="done" hidden>
+      <div class="qm-ring"><svg viewBox="0 0 30 30" fill="none"><path d="M7 15.5 12.5 21 23 9" stroke="#2D5BD6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h3>You're all set, <span id="qmDoneName">there</span>.</h3>
+      <p class="qm-sub">We're preparing your quote from top Florida carriers. Watch your <b>text and email</b> — usually within about 15 minutes.</p>
+      <span class="qm-badge">Never sold · One agent · No spam calls</span>
+    </div>
+  </div>
+</div>
+
 <script>
   document.getElementById('yr').textContent = new Date().getFullYear();
 
@@ -504,6 +717,82 @@
     catch(e){ return ''; }
   }
 
+  /* ===================== ADDRESS AUTOCOMPLETE — Google Places API (New) ===================== */
+  // Paste your Places API (New) BROWSER key below. Leave '' to disable (plain typed fields still work).
+  // Google Cloud setup: enable "Places API (New)" (its own toggle, separate from legacy Places API),
+  // create a Browser key, then restrict it — Application restriction: HTTP referrers
+  // (https://homeinsfl.com/*, https://www.homeinsfl.com/*, https://*.pages.dev/* for testing);
+  // API restriction: Places API (New). Billing is session-based via the session token below.
+  const GOOGLE_PLACES_KEY = 'AIzaSyBS9o5pxely2bX2LZ1_u6gnWe7ACEwItb8';
+
+  const FL_BOUNDS = { west:-87.70, south:24.30, east:-79.85, north:31.10 };  // restrict suggestions to Florida
+  let _acToken=null, _AcSuggestion=null, _AcToken=null, _acItems=[], _acActive=-1, _acTimer=null;
+
+  (function loadPlaces(){
+    if(!GOOGLE_PLACES_KEY) return;   // no key → graceful: plain address fields keep working
+    // Official Google Maps JS bootstrap loader (enables google.maps.importLibrary).
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({key:GOOGLE_PLACES_KEY,v:"weekly"});
+    setupPlaces();
+  })();
+
+  async function setupPlaces(){
+    try{
+      const lib = await google.maps.importLibrary("places");
+      _AcSuggestion = lib.AutocompleteSuggestion; _AcToken = lib.AutocompleteSessionToken;
+      const input = document.getElementById('street');
+      input.addEventListener('input', onAcInput);
+      input.addEventListener('keydown', onAcKey);
+      input.addEventListener('blur', ()=> setTimeout(hideAc, 150));
+    }catch(e){ /* load failed → plain typed fields keep working */ }
+  }
+  function acTok(){ if(!_acToken && _AcToken) _acToken = new _AcToken(); return _acToken; }
+  function onAcInput(e){ const v=e.target.value.trim(); clearTimeout(_acTimer); if(v.length<3){ hideAc(); return; } _acTimer=setTimeout(()=>fetchAc(v),180); }
+  async function fetchAc(input){
+    try{
+      const { suggestions } = await _AcSuggestion.fetchAutocompleteSuggestions({
+        input, sessionToken: acTok(), includedRegionCodes:['us'], locationRestriction: FL_BOUNDS
+      });
+      _acItems = (suggestions||[]).map(s => s.placePrediction).filter(Boolean);
+      renderAc();
+    }catch(e){ hideAc(); }
+  }
+  function renderAc(){
+    const list = document.getElementById('acList');
+    if(!_acItems.length){ hideAc(); return; }
+    _acActive = -1; list.innerHTML = '';
+    _acItems.forEach((p,i)=>{ const d=document.createElement('div'); d.className='ac-item';
+      d.textContent = (p.text && p.text.text) ? p.text.text : '';
+      d.addEventListener('mousedown', ev=>{ ev.preventDefault(); pickAc(i); });
+      list.appendChild(d); });
+    list.classList.add('show');
+  }
+  function onAcKey(e){
+    const list=document.getElementById('acList'); if(!list.classList.contains('show')) return;
+    const items=[...list.children];
+    if(e.key==='ArrowDown'){ e.preventDefault(); _acActive=Math.min(_acActive+1,items.length-1); markAc(items); }
+    else if(e.key==='ArrowUp'){ e.preventDefault(); _acActive=Math.max(_acActive-1,0); markAc(items); }
+    else if(e.key==='Enter'){ if(_acActive>=0){ e.preventDefault(); pickAc(_acActive); } }
+    else if(e.key==='Escape'){ hideAc(); }
+  }
+  function markAc(items){ items.forEach((el,i)=> el.classList.toggle('active', i===_acActive)); }
+  async function pickAc(i){
+    const pred=_acItems[i]; if(!pred) return; hideAc();
+    try{
+      const place = pred.toPlace();
+      await place.fetchFields({ fields:['addressComponents'] });
+      const comp={}; (place.addressComponents||[]).forEach(c=> (c.types||[]).forEach(t=> comp[t]=c.longText||c.shortText));
+      const street=((comp.street_number||'')+' '+(comp.route||'')).trim();
+      const city = comp.locality || comp.sublocality || comp.postal_town || comp.administrative_area_level_3 || '';
+      const zip = comp.postal_code || '';
+      if(street) document.getElementById('street').value = street;
+      if(city) document.getElementById('city').value = city;
+      if(zip) document.getElementById('zip').value = zip;
+      // state stays FL (hidden input)
+    }catch(e){ /* keep whatever they typed */ }
+    _acToken = null;   // end the billing session; next typing starts a fresh one
+  }
+  function hideAc(){ const l=document.getElementById('acList'); if(l) l.classList.remove('show'); }
+
   // ---- in-memory lead state (no browser storage used) ----
   const lead = { source: 'web:homeinsfl', insuranceType: 'HO-3: Homeowners', lifecycleStage: 'new_lead', landingPage: location.href, sourcePage: location.pathname };
   let capturePromise = null;   // resolves to { leadId, token } from Call A
@@ -511,70 +800,205 @@
   function isEmail(s){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
 
   // STEP 1 → Call A (capture). Fires immediately so the lead is never lost,
-  // then advances to step 2 without waiting on the network.
+  // then opens the quote modal (the post-Step-1 flow).
   function goStep2(){
-    const fn = val('firstName'), ln = val('lastName'),
+    const fn = val('firstName'), ln = val('lastName'), dob = val('dob'),
           street = val('street'), city = val('city'), zip = val('zip'),
           em = val('email'), ph = val('phone'),
           ct = document.getElementById('consentText').checked;
-    const ok = fn && ln && street && city && /^\d{5}$/.test(zip)
+    const ok = fn && ln && dob && street && city && /^\d{5}$/.test(zip)
                && isEmail(em) && ph.replace(/\D/g,'').length >= 7 && ct;
     if(!ok){ document.getElementById('err1').style.display='block'; return; }
     document.getElementById('err1').style.display='none';
 
     Object.assign(lead, {
-      firstName: fn, lastName: ln,
+      firstName: fn, lastName: ln, dateOfBirth: dob,
       address: { line1: street, city, state: val('state') || 'FL', zip }, // county derived server-side from zip
       email: em, phone: ph,
       consentText: true, consentPhone: document.getElementById('consentPhone').checked
     });
 
-    // Call A — create/capture the lead. Returns { leadId, token } used by Call B.
+    // Call A — create/capture the lead. Returns { leadId, token } (and later { property })
+    // used by Call B and by the modal prefill. This is also what triggers the PropertyLens
+    // /property-characteristics pull on the PoliFlow side.
     capturePromise = submitIntake({ ...lead, stage: 'captured', turnstileToken: getTurnstileToken() });
-    swap('step1','step2');
+    qmOpen();
   }
 
-  function backStep1(){ swap('step2','step1'); }
+  /* ===================== QUOTE MODAL ENGINE ===================== */
+  const MANUAL = ['roofYear','roofShape','roofMaterial','coverage','deductible','otherStructures','waterHeater','comments'];
+  const Q = {};            // collected manual answers
+  let PROP = null;         // PropertyLens characteristics (from Call A response, or mock)
+  let qmUploadFiles = [];
+  const PSF = 175;         // $/sqft for the dwelling estimate (Central FL) — tune here
 
-  function showFile(input){
-    const chip = document.getElementById('filechip');
-    if(input.files && input.files[0]){
-      document.getElementById('filename').textContent = input.files[0].name;
-      chip.style.display = 'flex';
-    } else { chip.style.display = 'none'; }
-  }
+  // Mock PropertyLens /property-characteristics until Call A returns real { property } data.
+  const MOCK_PROPERTY = { yearBuilt:2005, livingArea:1950, construction:'Frame', roofType:'Gable', roofCovering:'Composition Shingle', stories:1 };
 
-  function submitLead(){
-    const dob = val('dob'), gender = val('gender'), marital = val('marital'), eff = val('effective');
-    if(!(dob && gender && marital && eff)){ document.getElementById('err2').style.display='block'; return; }
-    document.getElementById('err2').style.display='none';
-
-    Object.assign(lead, {
-      dateOfBirth: dob, gender, maritalStatus: marital,
-      policyEffectiveDate: eff, insuranceType: val('policyType'),
-      currentCarrier: val('carrier')
+  function qmOpen(){
+    const ov = document.getElementById('qmOverlay');
+    ov.classList.add('open'); ov.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('qmAddr').textContent = (lead.address && lead.address.line1) ? lead.address.line1 : 'your address';
+    qmShow('loading');
+    const t0 = Date.now();
+    Promise.resolve(capturePromise).then(c => c || {}).catch(()=>({})).then(captured => {
+      PROP = (captured && captured.property) ? captured.property : MOCK_PROPERTY;
+      const wait = Math.max(0, 650 - (Date.now() - t0));   // avoid a flash of the spinner
+      setTimeout(()=> qmShow('choice'), wait);
     });
+  }
+  function qmClose(){
+    const ov = document.getElementById('qmOverlay');
+    ov.classList.remove('open'); ov.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') qmClose(); });
 
-    // Show the confirmation right away — all the heavy work happens off-stage.
-    document.getElementById('doneName').textContent = lead.firstName || 'there';
-    swap('step2','done');
-
-    // Call B — full quote-ready submit, in the background.
-    sendQuoteReady();
+  function qmShow(name){
+    document.querySelectorAll('#qmOverlay .qm-screen').forEach(s => { s.hidden = (s.dataset.screen !== name); });
+    const prog = document.getElementById('qmProg');
+    const idx = MANUAL.indexOf(name);
+    if(idx >= 0){ prog.classList.add('show'); document.getElementById('qmProgFill').style.width = ((idx+1)/MANUAL.length*100) + '%'; }
+    else { prog.classList.remove('show'); }
+    if(name === 'roofShape') qmPreselectShape();
+    if(name === 'roofMaterial') qmPreselectMaterial();
+    if(name === 'coverage') qmInitCoverage();
+    const card = document.querySelector('#qmOverlay .qm-card'); if(card) card.scrollTop = 0;
+  }
+  function qmStartManual(){ qmShow('roofYear'); }
+  function qmBack(){
+    const cur = [...document.querySelectorAll('#qmOverlay .qm-screen')].find(s => !s.hidden);
+    const i = MANUAL.indexOf(cur ? cur.dataset.screen : '');
+    if(i <= 0) qmShow('choice'); else qmShow(MANUAL[i-1]);
+  }
+  function qmNext(from){ const i = MANUAL.indexOf(from); if(i >= 0 && i < MANUAL.length-1) qmShow(MANUAL[i+1]); }
+  function qmErr(id){ const e = document.getElementById(id); if(e) e.classList.add('show'); }
+  function qmPick(group, value, el){
+    Q[group] = value;
+    const wrap = el.closest('.qm-tiles');
+    if(wrap){ wrap.querySelectorAll('.qm-tile').forEach(t => t.classList.remove('sel')); el.classList.add('sel'); }
   }
 
-  async function sendQuoteReady(){
-    // Read any uploaded files to base64 so PoliFlow can run processUploadedDocument().
-    const fileEls = (document.getElementById('docfile').files) || [];
-    const files = [];
-    for(const f of fileEls){
-      try { files.push({ fileName: f.name, mimeType: f.type, fileData: await fileToBase64(f) }); }
-      catch(e){ /* skip unreadable file; lead still proceeds */ }
+  // ---- roof year ----
+  function qmRoofOriginalToggle(cb){ const yi = document.getElementById('qmRoofYear'); yi.disabled = cb.checked; if(cb.checked) yi.value = ''; }
+  function qmRoofUnsure(){ Q.roofYear = null; Q.roofYearSource = 'unsure'; Q.routeAgent = true; qmNext('roofYear'); }
+  function qmRoofYearNext(){
+    if(document.getElementById('qmRoofOriginal').checked){
+      Q.roofYear = (PROP && PROP.yearBuilt) || null; Q.roofYearSource = 'original';
+      document.getElementById('qmRoofYearErr').classList.remove('show'); return qmNext('roofYear');
     }
-    // Wait for Call A so we can attach the leadId/token.
+    const y = parseInt(document.getElementById('qmRoofYear').value, 10);
+    const now = new Date().getFullYear();
+    const built = (PROP && PROP.yearBuilt) || 1900;
+    if(!y || y < built || y > now){ qmErr('qmRoofYearErr'); return; }
+    Q.roofYear = y; Q.roofYearSource = 'client';
+    document.getElementById('qmRoofYearErr').classList.remove('show');
+    qmNext('roofYear');
+  }
+
+  // ---- roof shape / material (pre-select from PropertyLens) ----
+  function qmPreselectShape(){
+    if(Q.roofShape || !PROP || !PROP.roofType) return;
+    const v = /hip/i.test(PROP.roofType) ? 'Hip' : /gable/i.test(PROP.roofType) ? 'Gable' : null;
+    if(v){ const el = document.querySelector('#qmShapeTiles .qm-tile[data-val="'+v+'"]'); if(el){ Q.roofShape = v; el.classList.add('sel'); } }
+  }
+  function qmShapeNext(){ if(!Q.roofShape){ qmErr('qmShapeErr'); return; } qmNext('roofShape'); }
+  function qmPreselectMaterial(){
+    if(Q.roofMaterial || !PROP || !PROP.roofCovering) return;
+    const c = PROP.roofCovering;
+    const v = /shingle|composition|asphalt/i.test(c) ? 'Asphalt Shingle' : /metal/i.test(c) ? 'Metal' : /tile|clay|concrete/i.test(c) ? 'Tile' : null;
+    if(v){ const el = document.querySelector('#qmMatTiles .qm-tile[data-val="'+v+'"]'); if(el){ Q.roofMaterial = v; el.classList.add('sel'); } }
+  }
+  function qmMatNext(){ if(!Q.roofMaterial){ qmErr('qmMatErr'); return; } qmNext('roofMaterial'); }
+
+  // ---- coverage ($175/sqft estimate, adjustable) ----
+  function qmInitCoverage(){
+    if(Q.coverageA != null) return;
+    const sqft = (PROP && PROP.livingArea) ? PROP.livingArea : 0;
+    if(sqft > 0){ Q.coverageA = Math.round(sqft * PSF / 1000) * 1000; Q.coverageSource = 'estimated'; }
+    else { Q.coverageA = 0; Q.coverageSource = 'client'; }
+    qmRenderCov();
+  }
+  function qmRenderCov(){
+    document.getElementById('qmCovAmt').textContent = Q.coverageA ? '$' + Q.coverageA.toLocaleString() : '—';
+    document.getElementById('qmCovInput').value = Q.coverageA ? Q.coverageA.toLocaleString() : '';
+    const sqft = (PROP && PROP.livingArea) || 0;
+    document.getElementById('qmCovBasis').textContent = sqft
+      ? 'Based on ~' + sqft.toLocaleString() + ' sq ft × $' + PSF + '/sq ft'
+      : 'Enter your estimated rebuild cost';
+  }
+  function qmCovStep(d){ Q.coverageA = Math.max(0, (Q.coverageA||0) + d); Q.coverageSource = 'client'; qmRenderCov(); }
+  function qmCovType(v){ const n = parseInt(String(v).replace(/\D/g,''), 10) || 0; Q.coverageA = n; Q.coverageSource = 'client';
+    document.getElementById('qmCovAmt').textContent = n ? '$' + n.toLocaleString() : '—'; }
+  function qmCovNext(){ if(!Q.coverageA || Q.coverageA < 10000){ qmErr('qmCovErr'); return; } qmNext('coverage'); }
+
+  // ---- deductible (hurricane always 2%) ----
+  function qmDedNext(){ if(!Q.aopDeductible){ qmErr('qmDedErr'); return; } Q.hurricaneDeductible = '2%'; qmNext('deductible'); }
+
+  // ---- other structures ----
+  function qmOther(v, el){ qmPick('otherStructures', v, el); document.getElementById('qmOtherVal').style.display = (v === 'Yes') ? 'block' : 'none'; }
+  function qmOtherNext(){
+    if(!Q.otherStructures){ qmErr('qmOtherErr'); return; }
+    Q.otherStructuresValue = (Q.otherStructures === 'Yes')
+      ? (parseInt((document.getElementById('qmOtherValIn').value||'').replace(/\D/g,''), 10) || null) : null;
+    qmNext('otherStructures');
+  }
+
+  // ---- water heater ----
+  function qmWH(v, el){ qmPick('waterHeater', v, el); document.getElementById('qmWHYear').style.display = (v === 'Replaced') ? 'block' : 'none'; }
+  function qmWHNext(){
+    if(!Q.waterHeater){ qmErr('qmWHErr'); return; }
+    if(Q.waterHeater === 'Original'){ Q.waterHeaterYear = (PROP && PROP.yearBuilt) || null; Q.waterHeaterSource = 'original'; }
+    else { Q.waterHeaterYear = parseInt(document.getElementById('qmWHYearIn').value, 10) || null; Q.waterHeaterSource = 'client'; }
+    qmNext('waterHeater');
+  }
+
+  // ---- submit (manual) ----
+  function qmSubmitManual(){
+    Q.comments = (document.getElementById('qmComments').value || '').trim();
+    Object.assign(lead, {
+      intakePath: 'manual',
+      roofYear: Q.roofYear, roofYearSource: Q.roofYearSource,
+      roofShape: Q.roofShape, roofMaterial: Q.roofMaterial,
+      coverageA: Q.coverageA, coverageSource: Q.coverageSource,
+      aopDeductible: Q.aopDeductible ? parseInt(Q.aopDeductible, 10) : null,
+      hurricaneDeductible: Q.hurricaneDeductible || '2%',
+      otherStructures: Q.otherStructures, otherStructuresValue: Q.otherStructuresValue || null,
+      waterHeaterYear: Q.waterHeaterYear, waterHeaterSource: Q.waterHeaterSource,
+      comments: Q.comments, routeAgent: !!Q.routeAgent
+    });
+    qmDone();
+  }
+
+  // ---- submit (upload) ----
+  function qmFilesChosen(input){
+    qmUploadFiles = [...(input.files || [])];
+    const list = document.getElementById('qmFileList'); list.innerHTML = '';
+    qmUploadFiles.forEach(f => { const d = document.createElement('div'); d.className = 'qm-filechip'; d.textContent = '📎 ' + f.name; list.appendChild(d); });
+    document.getElementById('qmUploadSubmit').disabled = qmUploadFiles.length === 0;
+  }
+  async function qmSubmitUpload(){
+    lead.intakePath = 'upload';
+    qmDone();   // optimistic confirmation — the lead is already captured (Call A)
+    const files = [];
+    for(const f of qmUploadFiles){
+      try { files.push({ fileName: f.name, mimeType: f.type, fileData: await fileToBase64(f) }); } catch(e){}
+    }
     let captured = {};
     try { captured = (await capturePromise) || {}; } catch(e){}
     submitIntake({ stage: 'quote-ready', leadId: captured.leadId, token: captured.token, ...lead, files });
+  }
+
+  // ---- confirmation + Call B (manual path fires here; upload path fires its own with files) ----
+  async function qmDone(){
+    document.getElementById('qmDoneName').textContent = lead.firstName || 'there';
+    qmShow('done');
+    if(lead.intakePath === 'manual'){
+      let captured = {};
+      try { captured = (await capturePromise) || {}; } catch(e){}
+      submitIntake({ stage: 'quote-ready', leadId: captured.leadId, token: captured.token, ...lead });
+    }
   }
 
   function fileToBase64(file){
@@ -603,11 +1027,6 @@
   }
 
   function val(id){ return (document.getElementById(id).value || '').trim(); }
-  function swap(hideId, showId){
-    const a = document.getElementById(hideId), b = document.getElementById(showId);
-    a.style.opacity = 0;
-    setTimeout(()=>{ a.style.display='none'; b.style.display='block'; b.style.opacity=0; requestAnimationFrame(()=> b.style.opacity=1); document.getElementById('formcard').scrollIntoView({behavior:'smooth',block:'center'}); }, 200);
-  }
 </script>
 </body>
 </html>
