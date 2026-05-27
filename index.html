@@ -876,7 +876,7 @@
   function hideAc(){ const l=document.getElementById('acList'); if(l) l.classList.remove('show'); }
 
   // ---- in-memory lead state (no browser storage used) ----
-  const lead = { source: 'web:homeinsfl', insuranceType: 'HO-3: Homeowners', lifecycleStage: 'new_lead', landingPage: location.href, sourcePage: location.pathname };
+  const lead = { source: 'web:homeinsfl', insuranceType: 'HO-3: Home Owners Policy', lifecycleStage: 'new_lead', landingPage: location.href, sourcePage: location.pathname };
   let capturePromise = null;   // resolves to { leadId, token } from Call A
 
   function isEmail(s){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
@@ -1006,7 +1006,7 @@
     if(PROP){ if(yb) PROP.yearBuilt = yb; if(sf) PROP.livingArea = sf; if(st) PROP.stories = st; if(cn) PROP.construction = cn; }
 
     // policy type: rental → DP-3, otherwise HO-3 (site owns this field)
-    lead.insuranceType = (Q.residenceType === 'Rental') ? 'DP-3: Dwelling Fire' : 'HO-3: Homeowners';
+    lead.insuranceType = (Q.residenceType === 'Rental') ? 'DP-3: Dwelling Property' : 'HO-3: Home Owners Policy';
     // pool present but no enclosure affirmed → agent reviews the liability question
     if(Q.pool === 'Yes' && Q.poolEnclosed === 'No') lead.routeAgent = true;
 
