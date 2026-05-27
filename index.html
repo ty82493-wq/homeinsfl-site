@@ -266,9 +266,10 @@
   .qm-step{ display:inline-block; font:600 .74rem "Hanken Grotesk"; letter-spacing:.05em; text-transform:uppercase;
     color:var(--blue-deep); background:var(--blue-soft); padding:5px 11px; border-radius:999px; margin-bottom:13px; }
   .qm-sub{ color:var(--muted); font-size:.96rem; margin-bottom:20px; }
-  .qm-screen input[type=number], .qm-screen input[type=text], .qm-screen input[type=date], .qm-screen textarea{
+  .qm-screen input[type=number], .qm-screen input[type=text], .qm-screen input[type=date], .qm-screen textarea, .qm-screen select{
     width:100%; font:500 1.05rem "Hanken Grotesk"; color:var(--ink); background:#fff; border:1.5px solid var(--line);
     border-radius:11px; padding:13px 14px; transition:border-color .15s,box-shadow .15s; }
+  .qm-screen select:focus{ outline:none; border-color:var(--blue); box-shadow:0 0 0 3px var(--blue-soft); }
   .qm-screen input:focus, .qm-screen textarea:focus{ outline:none; border-color:var(--blue); box-shadow:0 0 0 3px var(--blue-soft); }
   .qm-screen input:disabled{ background:var(--page); color:var(--muted); }
   .qm-screen textarea{ min-height:96px; resize:vertical; line-height:1.5; }
@@ -306,6 +307,9 @@
   .qm-step2 button:hover{ background:#fff; border-color:var(--blue); }
   .qm-cov-edit{ margin-top:16px; text-align:left; }
   .qm-cov-edit label{ font-size:.82rem; font-weight:600; color:var(--ink-2); margin-bottom:6px; display:block; }
+  .qm-vgrid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:4px; }
+  .qm-vfield label{ font-size:.82rem; font-weight:600; color:var(--ink-2); margin-bottom:6px; display:block; }
+  .qm-qlabel{ font-weight:600; color:var(--ink); margin:18px 0 10px; font-size:1.02rem; }
   .qm-drop{ display:block; border:2px dashed var(--line); border-radius:16px; padding:30px 18px; text-align:center;
     cursor:pointer; transition:border-color .15s,background .15s; }
   .qm-drop:hover{ border-color:var(--blue); background:var(--blue-soft); }
@@ -326,7 +330,7 @@
   .qm-badge{ display:inline-block; margin-top:18px; font-size:.82rem; font-weight:600; color:var(--blue-deep);
     background:var(--blue-soft); padding:8px 15px; border-radius:999px; }
   @media (max-width:560px){ .qm-card{ padding:30px 20px 24px; border-radius:18px; } .qm-cov .amt{ font-size:2.2rem; }
-    .qm-tiles.three{ grid-template-columns:1fr; } }
+    .qm-tiles.three{ grid-template-columns:1fr; } .qm-vgrid{ grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
@@ -545,6 +549,56 @@
       <div class="qm-spinner"></div>
       <h3>Looking up your home…</h3>
       <p class="qm-sub">Pulling property details for <b id="qmAddr">your address</b> so you don't have to type them.</p>
+    </div>
+
+    <!-- VERIFY: confirm property + key questions (one card) -->
+    <div class="qm-screen" data-screen="verify" hidden>
+      <h3>Let's confirm a few details about your home</h3>
+      <p class="qm-sub">We pulled these from public records — correct anything that's off, then answer a few quick questions.</p>
+
+      <div class="qm-vgrid">
+        <div class="qm-vfield"><label>Year built</label><input id="qmVYear" type="number" inputmode="numeric" min="1850" max="2026" /></div>
+        <div class="qm-vfield"><label>Living area (sq ft)</label><input id="qmVSqft" type="number" inputmode="numeric" min="100" max="50000" oninput="qmVSqftLive()" /></div>
+        <div class="qm-vfield"><label>Construction</label>
+          <select id="qmVConstruction"><option value="Frame">Frame</option><option value="Masonry">Masonry / block</option><option value="Other">Other</option></select></div>
+        <div class="qm-vfield"><label>Stories</label><input id="qmVStories" type="number" inputmode="numeric" min="1" max="6" /></div>
+      </div>
+
+      <div class="qm-qlabel">Is this your primary residence?</div>
+      <div class="qm-tiles three" id="qmResTiles">
+        <div class="qm-tile col" data-val="Primary" onclick="qmPick('residenceType','Primary',this)"><div class="t-title">Primary</div></div>
+        <div class="qm-tile col" data-val="Secondary" onclick="qmPick('residenceType','Secondary',this)"><div class="t-title">Secondary</div></div>
+        <div class="qm-tile col" data-val="Rental" onclick="qmPick('residenceType','Rental',this)"><div class="t-title">Rental</div></div>
+      </div>
+
+      <div class="qm-qlabel">Home type</div>
+      <div class="qm-tiles two" id="qmStructTiles">
+        <div class="qm-tile col" data-val="Single Family" onclick="qmPick('structureType','Single Family',this)"><div class="t-title">Single family</div></div>
+        <div class="qm-tile col" data-val="Townhome" onclick="qmPick('structureType','Townhome',this)"><div class="t-title">Townhome</div></div>
+      </div>
+
+      <div class="qm-qlabel">Is your home in a gated community?</div>
+      <div class="qm-tiles two" id="qmGatedTiles">
+        <div class="qm-tile col" data-val="Yes" onclick="qmPick('gatedCommunity','Yes',this)"><div class="t-title">Yes</div></div>
+        <div class="qm-tile col" data-val="No" onclick="qmPick('gatedCommunity','No',this)"><div class="t-title">No</div></div>
+      </div>
+
+      <div class="qm-qlabel">Do you have a pool?</div>
+      <div class="qm-tiles two" id="qmPoolTiles">
+        <div class="qm-tile col" data-val="Yes" onclick="qmPool('Yes',this)"><div class="t-title">Yes</div></div>
+        <div class="qm-tile col" data-val="No" onclick="qmPool('No',this)"><div class="t-title">No</div></div>
+      </div>
+
+      <div id="qmPoolEnc" style="display:none">
+        <div class="qm-qlabel">Is your yard fenced or your pool screen-enclosed?</div>
+        <div class="qm-tiles two" id="qmPoolEncTiles">
+          <div class="qm-tile col" data-val="Yes" onclick="qmPick('poolEnclosed','Yes',this)"><div class="t-title">Yes</div></div>
+          <div class="qm-tile col" data-val="No" onclick="qmPick('poolEnclosed','No',this)"><div class="t-title">No</div></div>
+        </div>
+      </div>
+
+      <p class="qm-err" id="qmVerifyErr">Please answer all the questions above to continue.</p>
+      <div class="qm-nav"><button class="btn" onclick="qmVerifyNext()">Continue →</button></div>
     </div>
 
     <!-- CHOICE: upload or manual -->
@@ -877,7 +931,7 @@
     Promise.resolve(capturePromise).then(c => c || {}).catch(()=>({})).then(captured => {
       PROP = (captured && captured.property) ? captured.property : MOCK_PROPERTY;
       const wait = Math.max(0, 650 - (Date.now() - t0));   // avoid a flash of the spinner
-      setTimeout(()=> qmShow('choice'), wait);
+      setTimeout(()=> qmShow('verify'), wait);
     });
   }
   function qmClose(){
@@ -893,6 +947,7 @@
     const idx = MANUAL.indexOf(name);
     if(idx >= 0){ prog.classList.add('show'); document.getElementById('qmProgFill').style.width = ((idx+1)/MANUAL.length*100) + '%'; }
     else { prog.classList.remove('show'); }
+    if(name === 'verify') qmInitVerify();
     if(name === 'roofShape') qmPreselectShape();
     if(name === 'roofMaterial') qmPreselectMaterial();
     if(name === 'coverage') qmInitCoverage();
@@ -910,6 +965,61 @@
     Q[group] = value;
     const wrap = el.closest('.qm-tiles');
     if(wrap){ wrap.querySelectorAll('.qm-tile').forEach(t => t.classList.remove('sel')); el.classList.add('sel'); }
+  }
+
+  // ---- verify card (editable property + key questions) ----
+  function qmInitVerify(){
+    if(qmInitVerify._done) return; qmInitVerify._done = true;
+    const p = PROP || {};
+    const set = (id,v)=>{ const el=document.getElementById(id); if(el && v!=null && v!=='') el.value = v; };
+    set('qmVYear', p.yearBuilt);
+    set('qmVSqft', p.livingArea);
+    set('qmVStories', p.stories);
+    const c = String(p.construction || '');
+    const cv = /block|mason|concrete|cbs/i.test(c) ? 'Masonry' : /frame|wood/i.test(c) ? 'Frame' : (c ? 'Other' : 'Frame');
+    const sel = document.getElementById('qmVConstruction'); if(sel) sel.value = cv;
+    if(!Q.structureType){ Q.structureType = 'Single Family';   // default unless they pick Townhome
+      const el = document.querySelector('#qmStructTiles .qm-tile[data-val="Single Family"]'); if(el) el.classList.add('sel'); }
+  }
+  function qmVSqftLive(){
+    const n = parseInt((document.getElementById('qmVSqft').value || '').replace(/\D/g,''), 10) || 0;
+    if(PROP) PROP.livingArea = n;   // coverage step re-estimates from this
+    Q.coverageA = null;             // force a fresh estimate at the coverage step
+  }
+  function qmPool(v, el){
+    qmPick('pool', v, el);
+    const box = document.getElementById('qmPoolEnc');
+    if(v === 'Yes'){ box.style.display = 'block'; }
+    else { box.style.display = 'none'; Q.poolEnclosed = null;
+      document.querySelectorAll('#qmPoolEncTiles .qm-tile').forEach(t => t.classList.remove('sel')); }
+  }
+  function qmVerifyNext(){
+    if(!Q.residenceType || !Q.structureType || !Q.gatedCommunity || !Q.pool ||
+       (Q.pool === 'Yes' && !Q.poolEnclosed)){ qmErr('qmVerifyErr'); return; }
+    document.getElementById('qmVerifyErr').classList.remove('show');
+
+    // editable property → write back to PROP (drives coverage + roof logic) and send as client-verified
+    const yb = parseInt((document.getElementById('qmVYear').value || '').replace(/\D/g,''), 10) || null;
+    const sf = parseInt((document.getElementById('qmVSqft').value || '').replace(/\D/g,''), 10) || null;
+    const st = parseInt((document.getElementById('qmVStories').value || '').replace(/\D/g,''), 10) || null;
+    const cn = document.getElementById('qmVConstruction').value || null;
+    if(PROP){ if(yb) PROP.yearBuilt = yb; if(sf) PROP.livingArea = sf; if(st) PROP.stories = st; if(cn) PROP.construction = cn; }
+
+    // policy type: rental → DP-3, otherwise HO-3 (site owns this field)
+    lead.insuranceType = (Q.residenceType === 'Rental') ? 'DP-3: Dwelling Fire' : 'HO-3: Homeowners';
+    // pool present but no enclosure affirmed → agent reviews the liability question
+    if(Q.pool === 'Yes' && Q.poolEnclosed === 'No') lead.routeAgent = true;
+
+    Object.assign(lead, {
+      verifiedProperty: { yearBuilt: yb, livingArea: sf, construction: cn, stories: st },
+      residenceType: Q.residenceType,        // backend → usageType + monthsOccupied
+      structureType: Q.structureType,
+      gatedCommunity: Q.gatedCommunity,       // backend → securedCommunity
+      pool: Q.pool,
+      poolEnclosed: (Q.pool === 'Yes') ? Q.poolEnclosed : 'No'  // backend → poolFenced + poolScreenEnclosure when "Yes"
+    });
+
+    qmShow('choice');
   }
 
   // ---- roof year ----
@@ -998,7 +1108,7 @@
       hurricaneDeductible: Q.hurricaneDeductible || '2%',
       otherStructures: Q.otherStructures, otherStructuresValue: Q.otherStructuresValue || null,
       waterHeaterYear: Q.waterHeaterYear, waterHeaterSource: Q.waterHeaterSource,
-      comments: Q.comments, routeAgent: !!Q.routeAgent
+      comments: Q.comments, routeAgent: !!(Q.routeAgent || lead.routeAgent)
     });
     qmDone();
   }
