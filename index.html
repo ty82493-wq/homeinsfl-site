@@ -901,7 +901,8 @@
       currentlyInsured: insured, // "Yes" → PoliFlow defaults carrier "Other" / policy "UNKNOWN"
       address: { line1: street, city, state: val('state') || 'FL', zip }, // county + effective date derived server-side
       email: em, phone: ph,
-      consentText: true, consentPhone: document.getElementById('consentPhone').checked
+      consentText: true, consentPhone: document.getElementById('consentPhone').checked,
+      creditPermission: 'Yes'
     });
 
     // Call A — create/capture the lead. Returns { leadId, token } (and later { property })
